@@ -27,10 +27,12 @@ namespace ExpensesApp
                 expense.Process();
             }
 
-            
+            Console.WriteLine("#***************************************#  RESULT  #****************************************#\n");
+
             foreach (var item in dictionaryOfPeopleInGroup)
             {
                 Console.WriteLine(item.Value.PrintAmountOwedByPerson());
+                Console.WriteLine(item.Value.PrintAmountOwedByPersonToOtherPerson());
             }
         }
 

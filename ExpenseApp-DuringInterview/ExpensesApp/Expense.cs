@@ -4,52 +4,65 @@ namespace ExpensesApp
 {
     public class Expense
     {
-        private readonly int _expenseAmount;
-        public Person PersonPaid { get; set; }
-        public IList<Person> PersonsPaidFor { get; set; }
+        private readonly int _totalAmount;
+        public Person PersonPaying { get; set; }
+        public IList<Person> PersonsInTransaction { get; set; }
 
-        public Expense(int expenseAmount, Person personPaid, IList<Person> personsesPaidFor)
+        public Expense(int totalAmount, Person personPaying, IList<Person> personsInTransaction)
         {
-            _expenseAmount = expenseAmount;
-            PersonPaid = personPaid;
-            PersonsPaidFor = personsesPaidFor;
-        }
-
-        public int GetTotalAmount()
-        {
-            return _expenseAmount;
+            _totalAmount = totalAmount;
+            PersonPaying = personPaying;
+            PersonsInTransaction = personsInTransaction;
         }
 
         public void Process()
         {
-            if (PersonsPaidFor.Contains(PersonPaid))
+            if (PersonsInTransaction.Contains(PersonPaying))
             {
-                var shareAmount = GetTotalAmount() / PersonsPaidFor.Count;
-                foreach (var person in PersonsPaidFor)
+                var perPersonShare = _totalAmount / PersonsInTransaction.Count;
+                foreach (var personInTransaction in PersonsInTransaction)
                 {
-                    if (person.Name == PersonPaid.Name)
+                    if (PersonPaying.Name == personInTransaction.Name)
                     {
-                        person.TotalAmountOwed = person.TotalAmountOwed - (GetTotalAmount() - shareAmount);
+                        var personPayingNetAmount = _totalAmount - perPersonShare;
+                        PersonPaying.TotalAmountOwed = PersonPaying.TotalAmountOwed - personPayingNetAmount;
                     }
                     else
                     {
-                        person.TotalAmountOwed = person.TotalAmountOwed + shareAmount;
-                        if (!person.PeopleIndebtedTo.ContainsKey(PersonPaid.Name))
-                            person.PeopleIndebtedTo.Add(PersonPaid.Name, shareAmount);
-                        else
-                            person.PeopleIndebtedTo[PersonPaid.Name] = person.PeopleIndebtedTo[PersonPaid.Name] + shareAmount;
+                        personInTransaction.TotalAmountOwed = personInTransaction.TotalAmountOwed + perPersonShare;
+                        AddIndebtedAmountPerPerson(personInTransaction, perPersonShare);
+                        SubtractIndebtedAmountFromPersonPaying(personInTransaction, perPersonShare);
                     }
                 }
             }
             else
             {
-                var shareAmount = GetTotalAmount() / PersonsPaidFor.Count;
-                foreach (var person in PersonsPaidFor)
+                var perPersonShare = _totalAmount / PersonsInTransaction.Count;
+                foreach (var personInTransaction in PersonsInTransaction)
                 {
-                    person.TotalAmountOwed = person.TotalAmountOwed + shareAmount;
+                    personInTransaction.TotalAmountOwed = personInTransaction.TotalAmountOwed + perPersonShare;
+                    AddIndebtedAmountPerPerson(personInTransaction, perPersonShare);
+                    SubtractIndebtedAmountFromPersonPaying(personInTransaction, perPersonShare);
                 }
-                PersonPaid.TotalAmountOwed = PersonPaid.TotalAmountOwed - GetTotalAmount();
+                PersonPaying.TotalAmountOwed = PersonPaying.TotalAmountOwed - _totalAmount;
             }
+        }
+
+        private void SubtractIndebtedAmountFromPersonPaying(Person p, int shareAmount)
+        {
+            if (!PersonPaying.PersonIndebtedTo.ContainsKey(p.Name))
+                PersonPaying.PersonIndebtedTo.Add(p.Name, -shareAmount);
+            else
+                PersonPaying.PersonIndebtedTo[p.Name] = PersonPaying.PersonIndebtedTo[p.Name] - shareAmount;
+        }
+
+
+        private void AddIndebtedAmountPerPerson(Person p, int shareAmount)
+        {
+            if (!p.PersonIndebtedTo.ContainsKey(PersonPaying.Name))
+                p.PersonIndebtedTo.Add(PersonPaying.Name, shareAmount);
+            else
+                p.PersonIndebtedTo[PersonPaying.Name] = p.PersonIndebtedTo[PersonPaying.Name] + shareAmount;
         }
     }
 }
