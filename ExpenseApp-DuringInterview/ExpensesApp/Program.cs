@@ -23,13 +23,14 @@ namespace ExpensesApp
                     personsPaidFor.Add(person);
                     Console.WriteLine(person.Name);
                 }
-                personPayingTransaction.PayExpense(new Expense(transaction.Amount, personPayingTransaction,personsPaidFor));
+                var expense = new Expense(transaction.Amount, personPayingTransaction,personsPaidFor);
+                expense.Process();
             }
 
             
             foreach (var item in dictionaryOfPeopleInGroup)
             {
-                Console.WriteLine(item.Value.GetExpenseShare());
+                Console.WriteLine(item.Value.PrintAmountOwedByPerson());
             }
         }
 

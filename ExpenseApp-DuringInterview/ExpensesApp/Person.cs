@@ -8,40 +8,19 @@ namespace ExpensesApp
         public Person(string name)
         {
             Name = name;
-            ExpensesShare = 0;
+            TotalAmountOwed = 0;
+            PeopleIndebtedTo=new Dictionary<string, int>();
         }
 
         public string Name { get; set; }
-        public int ExpensesShare { get; set; }
-        public void PayExpense(Expense expense)
-        {
-            if (expense.PersonPaidFor.Contains(expense.PersonPaid))
-            {
-                var shareAmount = expense.GetTotalAmount() / expense.PersonPaidFor.Count;
-                foreach (var person in expense.PersonPaidFor)
-                {
-                    if (person.Name == Name)
-                        person.ExpensesShare = person.ExpensesShare - (expense.GetTotalAmount()-shareAmount);
-                    else
-                        person.ExpensesShare = person.ExpensesShare + shareAmount;
-                }
-            }
-            else
-            {
-                var shareAmount = expense.GetTotalAmount() / expense.PersonPaidFor.Count;
-                foreach (var person in expense.PersonPaidFor)
-                {
-                    person.ExpensesShare = person.ExpensesShare + shareAmount;
-                }
-                expense.PersonPaid.ExpensesShare = expense.PersonPaid.ExpensesShare - expense.GetTotalAmount();
-            }
-        }
+        public int TotalAmountOwed { get; set; }
+        public IDictionary<string, int> PeopleIndebtedTo { get; set; }
 
-        public string GetExpenseShare()
+        public string PrintAmountOwedByPerson()
         {
-            if (this.ExpensesShare < 0)
-                return $"{this.Name} gets {Math.Abs(this.ExpensesShare)}";
-            return $"{this.Name} has to give {this.ExpensesShare}";
+            if (TotalAmountOwed < 0)
+                return $"{this.Name} gets {Math.Abs(this.TotalAmountOwed)}";
+            return $"{this.Name} has to give {this.TotalAmountOwed}";
         }
     }
 }
