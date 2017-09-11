@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ExpensesApp
 {
@@ -9,30 +7,42 @@ namespace ExpensesApp
         public Person(string name)
         {
             Name = name;
-            TotalAmountOwed = 0;
-            PersonIndebtedTo=new Dictionary<string, int>();
+            Credits = new CreditsLedger(name + " Credit Ledger");
+            Debits = new DebitsLedger(name + " Debit Ledger");
         }
 
         public string Name { get; set; }
-        public int TotalAmountOwed { get; set; }
-        public IDictionary<string, int> PersonIndebtedTo { get; set; }
+        public CreditsLedger Credits { get; set; }
+        public DebitsLedger Debits { get; set; }
 
-        public string PrintAmountOwedByPerson()
+        public string PrintTotalAmountDueOrOwed()
         {
-            if (TotalAmountOwed < 0)
-                return $"{this.Name} gets {Math.Abs(this.TotalAmountOwed)}";
-            return $"{this.Name} has to give {this.TotalAmountOwed}";
+            var totalAmountDueOrOwed = Credits.ComputeLedgerBalance() - Debits.ComputeLedgerBalance();
+            return totalAmountDueOrOwed>0 ? $"{Name} is owed Rs {totalAmountDueOrOwed}" : $"{Name} ows Rs {Math.Abs(totalAmountDueOrOwed)}";
         }
 
-        public string PrintAmountOwedByPersonToOtherPerson()
+        public string PrintAmountOwedOrDueByPerPerson()
         {
             var result = "";
-            foreach (var item in PersonIndebtedTo)
+            var totalAmountDueOrOwed = Credits.ComputeLedgerBalance() - Debits.ComputeLedgerBalance();
+            if (totalAmountDueOrOwed > 0)
             {
-                if(item.Value>0)
-                    result = result + $"{Name} has to pay {item.Key} Rs {item.Value} \n";
-                else
-                    result = result + $"{Name} has to receive from {item.Key} Rs {Math.Abs(item.Value)} \n";
+                var debitsLedger = Debits.GetLedger();
+                foreach (var entry in debitsLedger)
+                {
+                    if (entry.Key != Name)
+                        result += $"{entry.Key} owes Rs {entry.Value} to {Name}\n";
+                }
+            }
+            else
+            {
+                var creditsLedger = Credits.GetLedger();
+                foreach (var entry in creditsLedger)
+                {
+                    if (entry.Key != Name)
+                        result += $"{entry.Key} is owed Rs {entry.Value} by {Name}\n";
+                }
+
             }
             return result;
         }

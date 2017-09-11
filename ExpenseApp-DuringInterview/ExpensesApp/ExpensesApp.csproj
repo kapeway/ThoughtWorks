@@ -42,8 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CreditLedger.cs" />
     <Compile Include="DataImportHelper.cs" />
-    <Compile Include="Expense.cs" />
+    <Compile Include="ExpenseShareAppHelper.cs" />
     <Compile Include="ExpenseTransactions.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="Program.cs" />

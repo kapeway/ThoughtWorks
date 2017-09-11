@@ -9,39 +9,21 @@ namespace ExpensesApp
         {
             Console.WriteLine("Expenses Share App \n");
             var listOfTransactions = DataImportHelper.ImportListOfTransactions();
-            var dictionaryOfPeopleInGroup=new Dictionary<string,Person>();
+            var dictionaryOfPersons=new Dictionary<string,Person>();
 
             foreach (var transaction in listOfTransactions)
             {
-                AddNewPeopleToGroup(dictionaryOfPeopleInGroup,transaction);
-                var personPayingTransaction = dictionaryOfPeopleInGroup[transaction.Name];
-                var personsPaidFor = new List<Person> ();
-                Console.WriteLine($"{personPayingTransaction.Name} spent  {transaction.Amount} for");
-                foreach (var personInTransaction in transaction.PeopleInTransaction)
-                {
-                    var person = dictionaryOfPeopleInGroup[personInTransaction];
-                    personsPaidFor.Add(person);
-                    Console.WriteLine(person.Name);
-                }
-                var expense = new Expense(transaction.Amount, personPayingTransaction,personsPaidFor);
-                expense.Process();
+                ExpenseShareAppHelper.AddNewPersonToGroupFromTransaction(dictionaryOfPersons,transaction);
+                ExpenseShareAppHelper.PrintTransactionDetailsForDebugPurpose(dictionaryOfPersons, transaction);
+                ExpenseShareAppHelper.UpdateLedgerOfPersonsInvolvedInTransaction(dictionaryOfPersons, transaction);
             }
 
             Console.WriteLine("#***************************************#  RESULT  #****************************************#\n");
 
-            foreach (var item in dictionaryOfPeopleInGroup)
+            foreach (var item in dictionaryOfPersons)
             {
-                Console.WriteLine(item.Value.PrintAmountOwedByPerson());
-                Console.WriteLine(item.Value.PrintAmountOwedByPersonToOtherPerson());
-            }
-        }
-
-        private static void AddNewPeopleToGroup(Dictionary<string, Person> listOfPeopleInGroup, ExpenseTransactions transaction)
-        {
-            foreach (var personInTransactionName in transaction.PeopleInTransaction)
-            {
-                if(!listOfPeopleInGroup.ContainsKey(personInTransactionName))
-                    listOfPeopleInGroup.Add(personInTransactionName,new Person(personInTransactionName));
+                Console.WriteLine(item.Value.PrintTotalAmountDueOrOwed());
+                Console.WriteLine(item.Value.PrintAmountOwedOrDueByPerPerson());
             }
         }
     }
