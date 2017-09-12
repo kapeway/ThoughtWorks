@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Newtonsoft.Json;
 
 namespace ExpensesApp
 {
@@ -16,6 +16,35 @@ namespace ExpensesApp
         public string Name { get; set; }
         public CreditsLedger Credits { get; set; }
         public DebitsLedger Debits { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Person) obj);
+        }
+
+        protected bool Equals(Person other)
+        {
+            return string.Equals(Name, other.Name) && Equals(Credits, other.Credits) && Equals(Debits, other.Debits);
+        }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = (Name != null ? Name.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Credits != null ? Credits.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Debits != null ? Debits.GetHashCode() : 0);
+                return hashCode;
+            }
+        }
 
         public string PrintTotalAmountDueOrOwed()
         {

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using ExpensesApp;
+﻿using ExpensesApp;
 using NUnit.Framework;
 
 namespace ExpensesAppTests

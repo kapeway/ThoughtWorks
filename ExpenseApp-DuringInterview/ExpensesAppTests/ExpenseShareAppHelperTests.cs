@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ExpensesApp;
 using NUnit.Framework;
 
@@ -12,7 +9,7 @@ namespace ExpensesAppTests
     public class ExpenseShareAppHelperTests
     {
         [Test]
-        public void ExpenseShareAppHelper_UpdateLedgerForALoaningToB_()
+        public void ExpenseShareAppHelper_UpdateLedgerForALoaningToB_DebitsAndCreditsAppropriateRegisters()
         {
             var dictionaryOfPersons = new Dictionary<string, Person> {{"A", new Person("A")}, {"B", new Person("B")}};
             var expenseTransaction1 = new ExpenseTransactions { Amount = 100, Name = "A", PeopleInTransaction = new List<string> { "B" } };
@@ -26,7 +23,7 @@ namespace ExpensesAppTests
         }
 
         [Test]
-        public void ExpenseShareAppHelper_UpdateLedgerForBLoaningToA_()
+        public void ExpenseShareAppHelper_UpdateLedgerForBLoaningToA_DebitsAndCreditsAppropriateRegisters()
         {
             var dictionaryOfPersons = new Dictionary<string, Person> { { "A", new Person("A") }, { "B", new Person("B") } };
             var expenseTransaction1 = new ExpenseTransactions { Amount = 100, Name = "B", PeopleInTransaction = new List<string> { "A" } };
@@ -38,6 +35,14 @@ namespace ExpensesAppTests
             Assert.That(bCreditsLedger.First().Key, Is.EqualTo("A"));
             Assert.That(bCreditsLedger.First().Value, Is.EqualTo(100));
         }
-
+        [Test]
+        public void ExpenseShareAppHelper_AddNewPersonToGroupFromTransaction_DebitsAndCreditsAppropriateRegisters()
+        {
+            var expectedDictionaryOfPeople = new Dictionary<string, Person> {  { "B", new Person("B") }, { "A", new Person("A") } };
+            var dictionaryOfPersons = new Dictionary<string, Person>();
+            var expenseTransaction1 = new ExpenseTransactions { Amount = 100, Name = "B", PeopleInTransaction = new List<string> { "A" } };
+            ExpenseShareAppHelper.AddNewPersonToGroupFromTransaction(dictionaryOfPersons, expenseTransaction1);
+            CollectionAssert.AreEquivalent(dictionaryOfPersons, expectedDictionaryOfPeople);
+        }
     }
 }

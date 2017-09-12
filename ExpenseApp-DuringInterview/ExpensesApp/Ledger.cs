@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using Newtonsoft.Json;
 
 namespace ExpensesApp
 {
@@ -13,6 +11,7 @@ namespace ExpensesApp
             _ledger = new Dictionary<string, int>();
         }
         private IDictionary<string, int> _ledger { get; set; }
+        public string Name { get; set; }
 
         public int ComputeLedgerBalance()
         {
@@ -31,6 +30,32 @@ namespace ExpensesApp
         {
             return _ledger;
         }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Ledger) obj);
+        }
+
+        protected bool Equals(Ledger other)
+        {
+            return _ledger.SequenceEqual(other._ledger) && string.Equals(Name, other.Name);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((_ledger != null ? _ledger.GetHashCode() : 0) * 397) ^ (Name != null ? Name.GetHashCode() : 0);
+            }
+        }
     }
 
     public class CreditsLedger : Ledger
@@ -39,8 +64,6 @@ namespace ExpensesApp
         {
             Name = name;
         }
-        public string Name { get; set; }
-
     }
 
     public class DebitsLedger : Ledger
@@ -49,6 +72,5 @@ namespace ExpensesApp
         {
             Name = name;
         }
-        public string Name { get; set; }
     }
 }
