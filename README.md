@@ -7,7 +7,7 @@ This solution stores lesser data in memory but quiet intence on the computation 
 Expenses Share App
 
 # OUTPUT
-
+```
 A spent  100 for
 A
 B
@@ -40,3 +40,4 @@ D has to receive from A Rs 125
 D has to pay B Rs 100
 
 Press any key to continue . . .
+```
