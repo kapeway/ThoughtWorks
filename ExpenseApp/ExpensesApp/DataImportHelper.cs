@@ -1,31 +1,48 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ExpensesApp
 {
     class DataImportHelper
     {
-        public static List<ExpenseTransactions> ImportListOfTransactions()
-        {
-            var expenseTransactions1 = new ExpenseTransactions
-            {
-                Amount = 100,
-                Name = "A",
-                PeopleInTransaction = new List<string> { "A", "B", "C", "D" }
-            };
-            var expenseTransactions2 = new ExpenseTransactions
-            {
-                Amount = 500,
-                Name = "B",
-                PeopleInTransaction = new List<string> { "C", "D" }
-            };
-            var expenseTransactions3 = new ExpenseTransactions
-            {
-                Amount = 300,
-                Name = "D",
-                PeopleInTransaction = new List<string> { "A", "B" }
-            };
+        private static readonly string[] ProbablePeopleNames = { "Ajay", "Bapin", "Cathy", "Darwin", "Elango", "Frank", "Harry" };
 
-            return new List<ExpenseTransactions> { expenseTransactions1, expenseTransactions2, expenseTransactions3 };
+        public static IList<ExpenseTransactions> ImportListOfTransactions()
+        {
+            var listOfImportedTransactions = new List<ExpenseTransactions>();
+
+            for (var i = 0; i < 100; i++)
+            {
+                var randomAmount = new Random();
+                var randomUserPayingBill = SelectRandomPerson();
+                listOfImportedTransactions.Add(item: new ExpenseTransactions { Amount = randomAmount.Next(1, 10000), Name = randomUserPayingBill, PeopleInTransaction = SelectRandomPeopleToBeInTransaction(randomUserPayingBill) });
+            }
+            return listOfImportedTransactions;
+
+        }
+
+        private static IList<string> SelectRandomPeopleToBeInTransaction(string randomUserPayingBill)
+        {
+            var result = new List<string>();
+            var randomPersonInTransactionIterator = new Random();
+            var next = randomPersonInTransactionIterator.Next(1, ProbablePeopleNames.Length - 1);
+
+            while (result.Count < next)
+            {
+                for (var i = 0; i < next; i++)
+                {
+                    var selectRandomPerson = SelectRandomPerson();
+                    if (!result.Contains(selectRandomPerson) && selectRandomPerson != randomUserPayingBill)
+                        result.Add(selectRandomPerson);
+                }
+            }
+            return result;
+        }
+
+        private static string SelectRandomPerson()
+        {
+            var randomPersonIterator = new Random();
+            return ProbablePeopleNames[randomPersonIterator.Next(0, ProbablePeopleNames.Length - 1)];
         }
     }
 }

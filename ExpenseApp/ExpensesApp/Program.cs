@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace ExpensesApp
 {
@@ -10,7 +11,8 @@ namespace ExpensesApp
             Console.WriteLine("Expenses Share App \n");
             var listOfTransactions = DataImportHelper.ImportListOfTransactions();
             var dictionaryOfPeopleInGroup=new Dictionary<string,Person>();
-
+            var stopWatch=new Stopwatch();
+            stopWatch.Start();
             foreach (var transaction in listOfTransactions)
             {
                 AddNewPeopleToGroup(dictionaryOfPeopleInGroup,transaction);
@@ -34,10 +36,14 @@ namespace ExpensesApp
                 Console.WriteLine(item.Value.PrintAmountOwedByPerson());
                 Console.WriteLine(item.Value.PrintAmountOwedByPersonToOtherPerson());
             }
+            stopWatch.Stop();
+            Console.WriteLine($"The computation of each persons share took {stopWatch.Elapsed.TotalSeconds}");
         }
 
         private static void AddNewPeopleToGroup(Dictionary<string, Person> listOfPeopleInGroup, ExpenseTransactions transaction)
         {
+            if(!listOfPeopleInGroup.ContainsKey(transaction.Name))
+                listOfPeopleInGroup.Add(transaction.Name,new Person(transaction.Name));
             foreach (var personInTransactionName in transaction.PeopleInTransaction)
             {
                 if(!listOfPeopleInGroup.ContainsKey(personInTransactionName))
