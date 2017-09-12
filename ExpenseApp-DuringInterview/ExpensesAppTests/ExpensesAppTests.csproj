@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExpenseShareAppHelperTests.cs" />
     <Compile Include="LedgerTests.cs" />
     <Compile Include="PersonTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -52,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ExpensesApp\ExpensesApp.csproj">
-      <Project>{81B5431D-1F20-480E-A005-B53778FA0F77}</Project>
+      <Project>{81b5431d-1f20-480e-a005-b53778fa0f77}</Project>
       <Name>ExpensesApp</Name>
     </ProjectReference>
   </ItemGroup>

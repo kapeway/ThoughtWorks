@@ -17,7 +17,7 @@ namespace ExpensesAppTests
         public void Person_PrintTotalAmountDueOrOwed_ReturnsTotalAmountDueOrOwnedByPerson()
         {
             var sut = new Person("A");
-            Assert.That(sut.PrintTotalAmountDueOrOwed(), Is.EqualTo("A ows Rs 0"));
+            Assert.That(sut.PrintTotalAmountDueOrOwed(), Is.EqualTo("A has to give 0"));
         }
 
     }

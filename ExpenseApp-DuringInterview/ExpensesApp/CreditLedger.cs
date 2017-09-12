@@ -42,6 +42,7 @@ namespace ExpensesApp
         public string Name { get; set; }
 
     }
+
     public class DebitsLedger : Ledger
     {
         public DebitsLedger(string name)

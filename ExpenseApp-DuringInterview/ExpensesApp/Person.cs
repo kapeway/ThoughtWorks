@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ExpensesApp
 {
@@ -18,31 +20,46 @@ namespace ExpensesApp
         public string PrintTotalAmountDueOrOwed()
         {
             var totalAmountDueOrOwed = Credits.ComputeLedgerBalance() - Debits.ComputeLedgerBalance();
-            return totalAmountDueOrOwed>0 ? $"{Name} is owed Rs {totalAmountDueOrOwed}" : $"{Name} ows Rs {Math.Abs(totalAmountDueOrOwed)}";
+            return totalAmountDueOrOwed>0 ? $"{Name} gets {totalAmountDueOrOwed}" : $"{Name} has to give {Math.Abs(totalAmountDueOrOwed)}";
         }
 
         public string PrintAmountOwedOrDueByPerPerson()
         {
             var result = "";
-            var totalAmountDueOrOwed = Credits.ComputeLedgerBalance() - Debits.ComputeLedgerBalance();
-            if (totalAmountDueOrOwed > 0)
-            {
-                var debitsLedger = Debits.GetLedger();
-                foreach (var entry in debitsLedger)
-                {
-                    if (entry.Key != Name)
-                        result += $"{entry.Key} owes Rs {entry.Value} to {Name}\n";
-                }
-            }
-            else
-            {
-                var creditsLedger = Credits.GetLedger();
-                foreach (var entry in creditsLedger)
-                {
-                    if (entry.Key != Name)
-                        result += $"{entry.Key} is owed Rs {entry.Value} by {Name}\n";
-                }
+            var debitsLedger = Debits.GetLedger();
+            var creditsLedger = Credits.GetLedger();
+            result = result + ProcessDebitLedgerForDuesAndOwes(creditsLedger, debitsLedger);
+            result = result + ProcessCreditLedgerForOwesAndDues(creditsLedger, debitsLedger);
+            return result;
+        }
 
+        private string ProcessDebitLedgerForDuesAndOwes(IDictionary<string, int> creditsLedger, IDictionary<string, int> debitsLedger)
+        {
+            var result = "";
+            foreach (var debitEntry in debitsLedger)
+            {
+                if (creditsLedger.ContainsKey(debitEntry.Key))continue;
+                result = result + $"{Name} has to pay {debitEntry.Key} Rs {debitEntry.Value}\n";
+            }
+            return result;
+        }
+
+        private string ProcessCreditLedgerForOwesAndDues(IDictionary<string, int> creditsLedger, IDictionary<string, int> debitsLedger)
+        {
+            var result = "";
+            foreach (var creditEntry in creditsLedger)
+            {
+                if (creditEntry.Key == Name) continue;
+                var balanceDueOrOwed = 0;
+                if (debitsLedger.ContainsKey(creditEntry.Key))
+                    balanceDueOrOwed = creditEntry.Value - debitsLedger[creditEntry.Key];
+                else
+                    balanceDueOrOwed = creditEntry.Value;
+
+                if (balanceDueOrOwed > 0)
+                    result = result + $"{Name} has to recieve from {creditEntry.Key} Rs {balanceDueOrOwed}\n";
+                else
+                    result = result + $"{Name} has to pay {creditEntry.Key} Rs {Math.Abs(balanceDueOrOwed)}\n";
             }
             return result;
         }
