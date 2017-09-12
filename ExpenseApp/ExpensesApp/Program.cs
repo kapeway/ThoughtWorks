@@ -38,6 +38,9 @@ namespace ExpensesApp
 
         private static void AddNewPeopleToGroup(Dictionary<string, Person> listOfPeopleInGroup, ExpenseTransactions transaction)
         {
+            if (!listOfPeopleInGroup.ContainsKey(transaction.Name))
+                listOfPeopleInGroup.Add(transaction.Name, new Person(transaction.Name));
+
             foreach (var personInTransactionName in transaction.PeopleInTransaction)
             {
                 if(!listOfPeopleInGroup.ContainsKey(personInTransactionName))
