@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ExpensesApp
+namespace ExpensesApp.Models
 {
     public class ExpenseTransactions
     {

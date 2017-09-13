@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace ExpensesApp
+namespace ExpensesApp.Models
 {
     public class Person
     {

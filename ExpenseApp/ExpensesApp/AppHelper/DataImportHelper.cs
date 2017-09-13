@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using ExpensesApp.Models;
 
-namespace ExpensesApp
+namespace ExpensesApp.AppHelper
 {
     class DataImportHelper
     {

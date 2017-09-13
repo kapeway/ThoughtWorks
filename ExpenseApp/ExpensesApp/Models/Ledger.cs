@@ -2,7 +2,7 @@
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace ExpensesApp
+namespace ExpensesApp.Models
 {
     public abstract class Ledger 
     {

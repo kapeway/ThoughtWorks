@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using ExpensesApp;
+using ExpensesApp.Models;
 using NUnit.Framework;
 
 namespace ExpensesAppTests

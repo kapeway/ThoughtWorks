@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using ExpensesApp.AppHelper;
+using ExpensesApp.Models;
 
 namespace ExpensesApp
 {

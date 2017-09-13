@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using ExpensesApp.Models;
 
-namespace ExpensesApp
+namespace ExpensesApp.AppHelper
 {
     public class ExpenseShareAppHelper
     {
