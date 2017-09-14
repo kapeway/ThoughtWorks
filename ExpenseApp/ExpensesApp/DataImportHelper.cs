@@ -11,7 +11,7 @@ namespace ExpensesApp
         {
             var listOfImportedTransactions = new List<ExpenseTransactions> ();
 
-            for (var i = 0; i < 100; i++)
+            for (var i = 0; i < 10; i++)
             {
                 var randomAmount = new Random();
                 var randomUserPayingBill = SelectRandomPerson();
