@@ -37,7 +37,9 @@ namespace ExpensesApp
                 Console.WriteLine(item.Value.PrintAmountOwedByPersonToOtherPerson());
             }
             stopWatch.Stop();
-            Console.WriteLine($"The computation of each persons share took {stopWatch.Elapsed.TotalSeconds}");
+            Console.WriteLine($"The computation of each persons share took {stopWatch.Elapsed.TotalSeconds} for {listOfTransactions.Count} Transactions");
+            var currentProcess = Process.GetCurrentProcess();
+            Console.WriteLine($"Total Memory Used for {listOfTransactions.Count} Transactions is :: {currentProcess.WorkingSet64}");
         }
 
         private static void AddNewPeopleToGroup(Dictionary<string, Person> listOfPeopleInGroup, ExpenseTransactions transaction)
