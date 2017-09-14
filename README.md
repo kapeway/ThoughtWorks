@@ -41,3 +41,7 @@ D has to pay B Rs 100
 
 Press any key to continue . . .
 ```
+Old vs New Algo Comparission
+[![algo-comp-memory](https://github.com/kapeway/ThoughtWorks/tree/master/ComparissionResult/image001.png)](#algo-comp-memory)
+[![algo-comp-time](https://github.com/kapeway/ThoughtWorks/tree/master/ComparissionResult/image003.png)](#algo-comp-time)
+
